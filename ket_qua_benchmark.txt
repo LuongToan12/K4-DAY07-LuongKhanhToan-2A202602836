@@ -1,0 +1,333 @@
+======================================================================
+BENCHMARK REPORT — STRATEGY: FIXED_SIZE
+======================================================================
+Total chunks loaded: 127
+Benchmark Score    : 1 / 10 points
+
+--- RESULTS BY QUERY ---
+
+[Q1] Điều kiện để sinh viên được công nhận tốt nghiệp đại học chính quy là gì?
+  Gold Document : 01-academic-regulations
+  Must Contain  : "2.0"
+  Score (/2)    : 1
+  Doc in Top-3  : YES (Rank: 3)
+  Content Match : NO
+  Top-3 Chunks  :
+    #1 [score=0.291] (09-international-exchange-hcm) ps://daihoc.fpt.edu.vn/hcm/sinh-vien-fptu-kham-pha-van-hoa-trung-quoc-tai-summer-camp-o-th...
+    #2 [score=0.260] (10-departments-and-leadership-hcm)  tạo lớn.  **Quá trình công tác:** 2017 đến nay: Trưởng khoa Quản trị Kinh doanh, Trường Đ...
+    #3 [score=0.206] (01-academic-regulations) u trúc từ các môn học hoặc học phần (sau đây gọi chung là học phần), trong đó có các học p...
+
+[Q2] Mức học phí chuyên ngành một học kỳ tại Campus TP. Hồ Chí Minh áp dụng cho khóa K22 ngành Công nghệ thông tin là bao nhiêu?
+  Gold Document : 03-tuition-hcm
+  Must Contain  : "31.600.000"
+  Score (/2)    : 0
+  Doc in Top-3  : NO (Rank: None)
+  Content Match : NO
+  Top-3 Chunks  :
+    #1 [score=0.389] (10-departments-and-leadership-hcm) # Liên hệ & Bản đồ  ## Lãnh đạo và Phòng Ban tại **Campus TP. Hồ Chí Minh**  ## Thầy Trần ...
+    #2 [score=0.336] (06-campus-facilities-hcm) hập thị trường lao động toàn cầu với bản sắc Việt Nam và tư duy công dân toàn cầu.  [Tìm h...
+    #3 [score=0.287] (01-academic-regulations) Điều 3 của Quy chế này. - Bị kỷ luật ở mức buộc thôi học theo quy định về các vi phạm và m...
+
+[Q3] Thời hạn nộp hồ sơ chương trình học bổng Đại học FPT là ngày nào và có bắt buộc nộp video không?
+  Gold Document : 04-scholarship-faq
+  Must Contain  : "15/5/2026"
+  Score (/2)    : 0
+  Doc in Top-3  : NO (Rank: None)
+  Content Match : NO
+  Top-3 Chunks  :
+    #1 [score=0.367] (01-academic-regulations) Điều 3 của Quy chế này. - Bị kỷ luật ở mức buộc thôi học theo quy định về các vi phạm và m...
+    #2 [score=0.270] (01-academic-regulations) uận tốt nghiệp được tính vào điểm trung bình tích lũy cho toàn khóa học. 8. Sinh viên khôn...
+    #3 [score=0.251] (02-fap-and-academic-procedures) oàn bộ các thông báo của Nhà trường, nhấn vào More để xem toàn bộ các thông báo.  ### **Bư...
+
+[Q4] Sinh viên cần tích lũy bao nhiêu phần trăm tín chỉ để đủ điều kiện tham gia học kỳ thực tập doanh nghiệp OJT?
+  Gold Document : 07-ojt-regulations
+  Must Contain  : "90%"
+  Score (/2)    : 0
+  Doc in Top-3  : NO (Rank: None)
+  Content Match : NO
+  Top-3 Chunks  :
+    #1 [score=0.248] (03-tuition-hcm) 0.000 | 22.120.000 | | **Ngành Luật** | | | | Luật | 15.480.000 | 22.120.000 | | Luật kinh...
+    #2 [score=0.237] (01-academic-regulations) c lớp học theo mô hình lớp nhỏ với số lượng sinh viên vừa đủ, phù hợp với các môn học. 2. ...
+    #3 [score=0.226] (06-campus-facilities-hcm)  viên đa quốc gia đến học tập và trao đổi](https://daihoc.fpt.edu.vn/hcm/truong-dai-hoc-fp...
+
+[Q5] Phòng Dịch vụ Sinh viên tại campus TP.HCM có số điện thoại hotline và phòng làm việc ở đâu?
+  Gold Document : 05-student-services-hcm
+  Must Contain  : "028 7300 5585"
+  Score (/2)    : 0
+  Doc in Top-3  : NO (Rank: None)
+  Content Match : NO
+  Top-3 Chunks  :
+    #1 [score=0.327] (01-academic-regulations)  phần. 3. Đánh giá trong quá trình là tập hợp của các bài kiểm tra, bài tập, bài thực hành...
+    #2 [score=0.235] (09-international-exchange-hcm) ps://daihoc.fpt.edu.vn/hcm/sinh-vien-fptu-kham-pha-van-hoa-trung-quoc-tai-summer-camp-o-th...
+    #3 [score=0.232] (07-ojt-regulations)  cần đạt **ít nhất 90% tổng số tín chỉ tích lũy từ Học kỳ 1 – Học kỳ 5 (không bao gồm các ...
+
+======================================================================
+A/B TEST ON FILTER (QUERY 5)
+======================================================================
+WITHOUT FILTER (search):
+  #1 (01-academic-regulations | audience=student)  phần.
+3. Đánh giá trong quá trình là tập hợp của các bài kiểm tra, bài tập, bài...
+  #2 (10-departments-and-leadership-hcm | audience=staff)  tin Thư viện
+
+Cô Phan Thị Diệu Hà
+
+Chủ nhiệm BM QTKD – Khởi nghiệp
+
+[Xem chi ti...
+  #3 (09-international-exchange-hcm | audience=student) ps://daihoc.fpt.edu.vn/hcm/sinh-vien-fptu-kham-pha-van-hoa-trung-quoc-tai-summer...
+
+WITH FILTER metadata_filter={'audience': 'student'}:
+  #1 (01-academic-regulations | audience=student)  phần.
+3. Đánh giá trong quá trình là tập hợp của các bài kiểm tra, bài tập, bài...
+  #2 (09-international-exchange-hcm | audience=student) ps://daihoc.fpt.edu.vn/hcm/sinh-vien-fptu-kham-pha-van-hoa-trung-quoc-tai-summer...
+  #3 (07-ojt-regulations | audience=student)  cần đạt **ít nhất 90% tổng số tín chỉ tích lũy từ Học kỳ 1 – Học kỳ 5 (không ba...
+
+======================================================================
+BENCHMARK REPORT — STRATEGY: BY_SENTENCES
+======================================================================
+Total chunks loaded: 126
+Benchmark Score    : 0 / 10 points
+
+--- RESULTS BY QUERY ---
+
+[Q1] Điều kiện để sinh viên được công nhận tốt nghiệp đại học chính quy là gì?
+  Gold Document : 01-academic-regulations
+  Must Contain  : "2.0"
+  Score (/2)    : 0
+  Doc in Top-3  : NO (Rank: None)
+  Content Match : NO
+  Top-3 Chunks  :
+    #1 [score=0.288] (05-student-services-hcm) Hồ Chí Minh**...
+    #2 [score=0.261] (06-campus-facilities-hcm) Không gian được bố trí đồng bộ với bàn ghế mới, trang thiết bị phục vụ giảng dạy, đáp ứng ...
+    #3 [score=0.252] (04-scholarship-faq) ### 7. Quy trình ứng tuyển học bổng gồm những vòng nào? Quy trình xét tuyển gồm các bước c...
+
+[Q2] Mức học phí chuyên ngành một học kỳ tại Campus TP. Hồ Chí Minh áp dụng cho khóa K22 ngành Công nghệ thông tin là bao nhiêu?
+  Gold Document : 03-tuition-hcm
+  Must Contain  : "31.600.000"
+  Score (/2)    : 0
+  Doc in Top-3  : NO (Rank: None)
+  Content Match : NO
+  Top-3 Chunks  :
+    #1 [score=0.281] (01-academic-regulations) Sinh viên không dự thi cuối học phần lần 1, coi như bị điểm 0. Lần thi 2 dành cho những si...
+    #2 [score=0.255] (01-academic-regulations) Sinh viên là người đáp ứng yêu cầu đầu vào và hoàn tất thủ tục nhập học đại học chính quy ...
+    #3 [score=0.222] (01-academic-regulations) Sinh viên có quyền phúc tra bài thi trong thời gian một tuần từ khi công bố kết quả. Nếu c...
+
+[Q3] Thời hạn nộp hồ sơ chương trình học bổng Đại học FPT là ngày nào và có bắt buộc nộp video không?
+  Gold Document : 04-scholarship-faq
+  Must Contain  : "15/5/2026"
+  Score (/2)    : 0
+  Doc in Top-3  : NO (Rank: None)
+  Content Match : NO
+  Top-3 Chunks  :
+    #1 [score=0.412] (02-fap-and-academic-procedures) - Để xem lịch thi, vui lòng chọn Exam Schedule. - Để xem báo cáo điểm danh: vui lòng chọn ...
+    #2 [score=0.304] (06-campus-facilities-hcm) [Explore](#)  ## Sân trường  Sân trường rộng rãi, thoáng mát, là nơi sinh viên thư giãn, g...
+    #3 [score=0.304] (01-academic-regulations) 2. Sinh viên được coi là đạt học phần khi đáp ứng tiêu chí hoàn thành học phần được quy đị...
+
+[Q4] Sinh viên cần tích lũy bao nhiêu phần trăm tín chỉ để đủ điều kiện tham gia học kỳ thực tập doanh nghiệp OJT?
+  Gold Document : 07-ojt-regulations
+  Must Contain  : "90%"
+  Score (/2)    : 0
+  Doc in Top-3  : NO (Rank: None)
+  Content Match : NO
+  Top-3 Chunks  :
+    #1 [score=0.276] (01-academic-regulations) Sinh viên có học phần bắt buộc không đạt vì bất cứ lý do gì phải đăng ký học lại học phần ...
+    #2 [score=0.254] (06-campus-facilities-hcm) [Explore](#)  ## Khu vực triển lãm  Khu vực trưng bày các sản phẩm, dự án và hoạt động sán...
+    #3 [score=0.206] (01-academic-regulations) Cụ thể:  1. Điều kiện chuyển sang giai đoạn học chuyên môn:  - Đạt trình độ tiếng Anh theo...
+
+[Q5] Phòng Dịch vụ Sinh viên tại campus TP.HCM có số điện thoại hotline và phòng làm việc ở đâu?
+  Gold Document : 05-student-services-hcm
+  Must Contain  : "028 7300 5585"
+  Score (/2)    : 0
+  Doc in Top-3  : NO (Rank: None)
+  Content Match : NO
+  Top-3 Chunks  :
+    #1 [score=0.258] (01-academic-regulations) Sinh viên phải trực tiếp nhận bản gốc bằng tốt nghiệp và bảng điểm tốt nghiệp. Trường hợp ...
+    #2 [score=0.237] (01-academic-regulations) Trách nhiệm và quyền hạn của giảng viên được phân công giảng dạy hoặc hướng dẫn sinh viên;...
+    #3 [score=0.237] (01-academic-regulations) 3. Việc chấm bảo vệ Đồ án/Khóa luận tốt nghiệp do Hội đồng bảo vệ tốt nghiệp của Trường do...
+
+======================================================================
+A/B TEST ON FILTER (QUERY 5)
+======================================================================
+WITHOUT FILTER (search):
+  #1 (06-campus-facilities-hcm | audience=all) [Tìm hiểu thêm](/hcm/toan-cau)
+
+### **cÔNG NGHỆ**
+
+Công nghệ là năng lực cốt lõi...
+  #2 (01-academic-regulations | audience=student) Sinh viên phải trực tiếp nhận bản gốc bằng tốt nghiệp và bảng điểm tốt nghiệp. T...
+  #3 (06-campus-facilities-hcm | audience=all) ## Trải nghiệm Khởi nghiệp
+
+Tinh thần khởi nghiệp được nuôi dưỡng xuyên suốt quá...
+
+WITH FILTER metadata_filter={'audience': 'student'}:
+  #1 (01-academic-regulations | audience=student) Sinh viên phải trực tiếp nhận bản gốc bằng tốt nghiệp và bảng điểm tốt nghiệp. T...
+  #2 (01-academic-regulations | audience=student) Trách nhiệm và quyền hạn của giảng viên được phân công giảng dạy hoặc hướng dẫn ...
+  #3 (01-academic-regulations | audience=student) 3. Việc chấm bảo vệ Đồ án/Khóa luận tốt nghiệp do Hội đồng bảo vệ tốt nghiệp của...
+
+======================================================================
+BENCHMARK REPORT — STRATEGY: RECURSIVE
+======================================================================
+Total chunks loaded: 141
+Benchmark Score    : 1 / 10 points
+
+--- RESULTS BY QUERY ---
+
+[Q1] Điều kiện để sinh viên được công nhận tốt nghiệp đại học chính quy là gì?
+  Gold Document : 01-academic-regulations
+  Must Contain  : "2.0"
+  Score (/2)    : 0
+  Doc in Top-3  : NO (Rank: None)
+  Content Match : NO
+  Top-3 Chunks  :
+    #1 [score=0.289] (09-international-exchange-hcm) ##### [Sinh viên Trường Đại học FPT trải nghiệm chương trình hè tại NUS Business School](h...
+    #2 [score=0.279] (05-student-services-hcm) **Cơ sở 1:  Lô E2a-7, Đường D1, Khu Công nghệ cao, Phường Tăng Nhơn Phú, TP. Hồ Chí Minh**...
+    #3 [score=0.278] (06-campus-facilities-hcm) Khởi nghiệp tại FPTU là tư duy làm chủ và tạo giá trị, được rèn luyện qua dự án thực tế, h...
+
+[Q2] Mức học phí chuyên ngành một học kỳ tại Campus TP. Hồ Chí Minh áp dụng cho khóa K22 ngành Công nghệ thông tin là bao nhiêu?
+  Gold Document : 03-tuition-hcm
+  Must Contain  : "31.600.000"
+  Score (/2)    : 0
+  Doc in Top-3  : NO (Rank: None)
+  Content Match : NO
+  Top-3 Chunks  :
+    #1 [score=0.263] (01-academic-regulations) 1. Đầu mỗi học kỳ, Trường sẽ thông báo Chương trình cho sinh viên học trong học kỳ, lịch h...
+    #2 [score=0.244] (01-academic-regulations) |  |  |  |  |  | | --- | --- | --- | --- | --- | | **Xếp loại** | | **Thang điểm chính thứ...
+    #3 [score=0.235] (06-campus-facilities-hcm) Khu vực trưng bày các sản phẩm, dự án và hoạt động sáng tạo của sinh viên – nơi ý tưởng đư...
+
+[Q3] Thời hạn nộp hồ sơ chương trình học bổng Đại học FPT là ngày nào và có bắt buộc nộp video không?
+  Gold Document : 04-scholarship-faq
+  Must Contain  : "15/5/2026"
+  Score (/2)    : 0
+  Doc in Top-3  : NO (Rank: None)
+  Content Match : NO
+  Top-3 Chunks  :
+    #1 [score=0.421] (02-fap-and-academic-procedures) # Hướng dẫn sử dụng cổng thông tin đào tạo FAP cho tân sinh viên Trường Đại học FPT - Trườ...
+    #2 [score=0.276] (01-academic-regulations) |  |  |  | | --- | --- | --- | | **A =** | **∑ ai­ \* ni** | với i từ 1 cho đến n | | **∑ ...
+    #3 [score=0.265] (01-academic-regulations) Quy chế này gồm 6 chương, 24 điều được áp dụng cho sinh viên đại học chính quy tất cả các ...
+
+[Q4] Sinh viên cần tích lũy bao nhiêu phần trăm tín chỉ để đủ điều kiện tham gia học kỳ thực tập doanh nghiệp OJT?
+  Gold Document : 07-ojt-regulations
+  Must Contain  : "90%"
+  Score (/2)    : 1
+  Doc in Top-3  : YES (Rank: 1)
+  Content Match : NO
+  Top-3 Chunks  :
+    #1 [score=0.299] (07-ojt-regulations) Mọi thắc mắc hoặc cần hỗ trợ, sinh viên vui lòng liên hệ:  **PHÒNG QUAN HỆ DOANH NGHIỆP** ...
+    #2 [score=0.261] (01-academic-regulations) 2. Hiệu trưởng hoặc Giám đốc phân hiệu sẽ xem xét từng trường hợp cụ thể và nếu được chấp ...
+    #3 [score=0.249] (01-academic-regulations) 2. Trường hợp sinh viên có nhu cầu xét tốt nghiệp và nhận bằng tốt nghiệp sớm, sinh viên c...
+
+[Q5] Phòng Dịch vụ Sinh viên tại campus TP.HCM có số điện thoại hotline và phòng làm việc ở đâu?
+  Gold Document : 05-student-services-hcm
+  Must Contain  : "028 7300 5585"
+  Score (/2)    : 0
+  Doc in Top-3  : NO (Rank: None)
+  Content Match : NO
+  Top-3 Chunks  :
+    #1 [score=0.297] (04-scholarship-faq) Có. Sau khi được thầy cô/nhà trường đề cử, Ban Học bổng sẽ liên hệ trực tiếp với thí sinh ...
+    #2 [score=0.276] (02-fap-and-academic-procedures) ### **Bước** **2:** Sau khi đăng nhập bạn có thể sử dụng các chức năng chính của hệ thống....
+    #3 [score=0.261] (07-ojt-regulations) Phòng Tổ chức và Quản lý đào tạo sẽ có thông báo về kết quả đủ điều kiện cho sinh viên qua...
+
+======================================================================
+A/B TEST ON FILTER (QUERY 5)
+======================================================================
+WITHOUT FILTER (search):
+  #1 (04-scholarship-faq | audience=student) Có. Sau khi được thầy cô/nhà trường đề cử, Ban Học bổng sẽ liên hệ trực tiếp với...
+  #2 (02-fap-and-academic-procedures | audience=student) ### **Bước** **2:** Sau khi đăng nhập bạn có thể sử dụng các chức năng chính của...
+  #3 (07-ojt-regulations | audience=student) Phòng Tổ chức và Quản lý đào tạo sẽ có thông báo về kết quả đủ điều kiện cho sin...
+
+WITH FILTER metadata_filter={'audience': 'student'}:
+  #1 (04-scholarship-faq | audience=student) Có. Sau khi được thầy cô/nhà trường đề cử, Ban Học bổng sẽ liên hệ trực tiếp với...
+  #2 (02-fap-and-academic-procedures | audience=student) ### **Bước** **2:** Sau khi đăng nhập bạn có thể sử dụng các chức năng chính của...
+  #3 (07-ojt-regulations | audience=student) Phòng Tổ chức và Quản lý đào tạo sẽ có thông báo về kết quả đủ điều kiện cho sin...
+
+======================================================================
+BENCHMARK REPORT — STRATEGY: HEADING_RECURSIVE
+======================================================================
+Total chunks loaded: 178
+Benchmark Score    : 1 / 10 points
+
+--- RESULTS BY QUERY ---
+
+[Q1] Điều kiện để sinh viên được công nhận tốt nghiệp đại học chính quy là gì?
+  Gold Document : 01-academic-regulations
+  Must Contain  : "2.0"
+  Score (/2)    : 0
+  Doc in Top-3  : NO (Rank: None)
+  Content Match : NO
+  Top-3 Chunks  :
+    #1 [score=0.346] (06-campus-facilities-hcm) # **Giá trị cốt lõi**...
+    #2 [score=0.289] (09-international-exchange-hcm) ##### [Sinh viên Trường Đại học FPT trải nghiệm chương trình hè tại NUS Business School](h...
+    #3 [score=0.260] (06-campus-facilities-hcm) ##### [Phan Thanh Hiếu – Sinh viên Trường ĐH FPT nhận học bổng Đại học Quốc lập Trung Hưng...
+
+[Q2] Mức học phí chuyên ngành một học kỳ tại Campus TP. Hồ Chí Minh áp dụng cho khóa K22 ngành Công nghệ thông tin là bao nhiêu?
+  Gold Document : 03-tuition-hcm
+  Must Contain  : "31.600.000"
+  Score (/2)    : 0
+  Doc in Top-3  : NO (Rank: None)
+  Content Match : NO
+  Top-3 Chunks  :
+    #1 [score=0.419] (04-scholarship-faq) ### 3. Thí sinh có thể ứng tuyển nhiều hạng mục học bổng cùng lúc không?  Có. Trong trường...
+    #2 [score=0.376] (04-scholarship-faq) ### 7. Quy trình ứng tuyển học bổng gồm những vòng nào?  Quy trình xét tuyển gồm các bước ...
+    #3 [score=0.323] (06-campus-facilities-hcm) ## Phòng học  Các phòng học được trang bị đầy đủ thiết bị giảng dạy hiện đại, không gian t...
+
+[Q3] Thời hạn nộp hồ sơ chương trình học bổng Đại học FPT là ngày nào và có bắt buộc nộp video không?
+  Gold Document : 04-scholarship-faq
+  Must Contain  : "15/5/2026"
+  Score (/2)    : 0
+  Doc in Top-3  : NO (Rank: None)
+  Content Match : NO
+  Top-3 Chunks  :
+    #1 [score=0.421] (02-fap-and-academic-procedures) # Hướng dẫn sử dụng cổng thông tin đào tạo FAP cho tân sinh viên Trường Đại học FPT - Trườ...
+    #2 [score=0.276] (10-departments-and-leadership-hcm) ### Thầy Nguyễn Trường Sơn  Phó Giám đốc Văn phòng Tổ chức giáo dục FPT tại TP.HCM...
+    #3 [score=0.276] (01-academic-regulations) |  |  |  | | --- | --- | --- | | **A =** | **∑ ai­ \* ni** | với i từ 1 cho đến n | | **∑ ...
+
+[Q4] Sinh viên cần tích lũy bao nhiêu phần trăm tín chỉ để đủ điều kiện tham gia học kỳ thực tập doanh nghiệp OJT?
+  Gold Document : 07-ojt-regulations
+  Must Contain  : "90%"
+  Score (/2)    : 1
+  Doc in Top-3  : YES (Rank: 2)
+  Content Match : NO
+  Top-3 Chunks  :
+    #1 [score=0.400] (06-campus-facilities-hcm) # **Thông tin** **tuyển sinh & học bổng**...
+    #2 [score=0.299] (07-ojt-regulations) Mọi thắc mắc hoặc cần hỗ trợ, sinh viên vui lòng liên hệ:  **PHÒNG QUAN HỆ DOANH NGHIỆP** ...
+    #3 [score=0.268] (02-fap-and-academic-procedures) ### **Bước** **3:** Tại mục **Academic Information**  Đây là phần quan trọng nhất dành cho...
+
+[Q5] Phòng Dịch vụ Sinh viên tại campus TP.HCM có số điện thoại hotline và phòng làm việc ở đâu?
+  Gold Document : 05-student-services-hcm
+  Must Contain  : "028 7300 5585"
+  Score (/2)    : 0
+  Doc in Top-3  : NO (Rank: None)
+  Content Match : NO
+  Top-3 Chunks  :
+    #1 [score=0.295] (02-fap-and-academic-procedures) ### **Bước** **2: Đăng nhập**  Sau khi tải ứng dụng về máy, bạn mở ứng dụng và tiến hành đ...
+    #2 [score=0.261] (07-ojt-regulations) Phòng Tổ chức và Quản lý đào tạo sẽ có thông báo về kết quả đủ điều kiện cho sinh viên qua...
+    #3 [score=0.237] (01-academic-regulations) 3. Việc chấm bảo vệ Đồ án/Khóa luận tốt nghiệp do Hội đồng bảo vệ tốt nghiệp của Trường do...
+
+======================================================================
+A/B TEST ON FILTER (QUERY 5)
+======================================================================
+WITHOUT FILTER (search):
+  #1 (02-fap-and-academic-procedures | audience=student) ### **Bước** **2: Đăng nhập**
+
+Sau khi tải ứng dụng về máy, bạn mở ứng dụng và t...
+  #2 (06-campus-facilities-hcm | audience=all) ### **Toàn cầu**
+
+Năng lực toàn cầu giúp sinh viên FPTU học tập và làm việc hiệu...
+  #3 (07-ojt-regulations | audience=student) Phòng Tổ chức và Quản lý đào tạo sẽ có thông báo về kết quả đủ điều kiện cho sin...
+
+WITH FILTER metadata_filter={'audience': 'student'}:
+  #1 (02-fap-and-academic-procedures | audience=student) ### **Bước** **2: Đăng nhập**
+
+Sau khi tải ứng dụng về máy, bạn mở ứng dụng và t...
+  #2 (07-ojt-regulations | audience=student) Phòng Tổ chức và Quản lý đào tạo sẽ có thông báo về kết quả đủ điều kiện cho sin...
+  #3 (01-academic-regulations | audience=student) 3. Việc chấm bảo vệ Đồ án/Khóa luận tốt nghiệp do Hội đồng bảo vệ tốt nghiệp của...
+
+======================================================================
+ALL STRATEGIES COMPARISON SUMMARY
+======================================================================
+Strategy             | Total Chunks   | Score (/10) 
+----------------------------------------------------
+fixed_size           | 127            | 1/10
+by_sentences         | 126            | 0/10
+recursive            | 141            | 1/10
+heading_recursive    | 178            | 1/10
