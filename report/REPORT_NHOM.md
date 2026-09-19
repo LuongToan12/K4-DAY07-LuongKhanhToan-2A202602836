@@ -1,171 +1,325 @@
-# Báo Cáo Nhóm — Lab 7: Embedding & Vector Store
+# BÁO CÁO NHÓM — LAB 7: EMBEDDING & VECTOR STORE
 
-**Nhóm:** Nhóm 2A — K4-L3A  
-**Thành viên:** Lương Khánh Toàn (và các thành viên nhóm 2A)  
-**Ngày:** 19/09/2026  
+**Nhóm:** 36 — K4-L3A Data Foundations  
+**Chủ đề:** FPTU HCM Student Policy & Services RAG  
+**Ngày hoàn thành:** 19/09/2026  
 
-> **Nộp 1 bản / nhóm.** Phần cá nhân (hướng tiếp cận, kết quả riêng, dự đoán…) mỗi thành viên nộp riêng trong `REPORT_CANHAN.md`. Chi tiết thang điểm: `docs/SCORING.md`.
+## Thành viên
 
-**Tổng điểm phần nhóm: 40** = Lựa chọn tài liệu (10) + Thiết kế chiến lược (15) + Chất lượng truy xuất (10) + Thuyết trình (5).
+| STT | Thành viên | Vai trò/đóng góp chính |
+|---:|---|---|
+| 1 | Hà Mạnh Tuân — MSSV 2A202602982 | Heading-aware hierarchical chunking, parent-child retrieval, Hybrid BM25 + Dense + RRF, evaluator 7 metric |
+| 2 | Lương Quang Huy | Heading-aware context chunking, metadata pre-filtering, phân tích semantic retrieval |
+| 3 | Đặng Quốc Cường | Embedding retrieval, metadata filtering, chạy và phân tích 5 gold queries |
+| 4 | Lương Khánh Toàn | So sánh MockEmbedder, metadata filter và Heading Recursive; phân tích Faithfulness/Audience Match |
 
----
-
-## 1. Lựa chọn tài liệu (Document Set Quality) — Nhóm (10 điểm)
-
-### Chủ đề (Domain) & Lý Do Chọn
-
-**Chủ đề:** Dịch vụ và Quy định Đại học (Quy chế đào tạo, học phí, học bổng, OJT và hỗ trợ học vụ tại Trường Đại học FPT - Campus TP.HCM).
-
-**Tại sao nhóm chọn chủ đề này?**
-> Đây là chủ đề bắt buộc theo ràng buộc của lớp K4-L3A. Nhóm chọn tập trung vào ĐH FPT vì các văn bản quy định đào tạo, hướng dẫn cổng FAP, thông báo thực tập OJT và biểu phí có tính thực tiễn cao, cấu trúc pháp lý rõ ràng (Chương, Điều, Khoản), rất phù hợp để so sánh khả năng giữ ngữ cảnh của các chiến lược chunking và thử nghiệm lọc siêu dữ liệu theo đối tượng sinh viên vs. cán bộ.
-
-### Danh sách tài liệu (Data Inventory)
-
-| # | Tên tài liệu | Nguồn (Source URL) | Ngày lấy / Phiên bản | Số ký tự | Metadata đã gán |
-|---|--------------|--------------------|----------------------|----------|-----------------|
-| 1 | `01-academic-regulations.md` | https://daihoc.fpt.edu.vn/hoat-dong-nha-truong/tin-tuc-chung/quy-che-dao-tao-dai-hoc-chinh-quy/ | 2026-09-19 / not-stated | 20.473 | `doc_id: 01-academic-regulations`, `audience: student`, `campus: all`, `category: academic_regulation` |
-| 2 | `02-fap-and-academic-procedures.md` | https://daihoc.fpt.edu.vn/tin-tuc-chung-2/huong-dan-su-dung-cong-thong-tin-dao-tao-fap-cho-tan-sinh-vien-dai-hoc-fpt/ | 2026-09-19 / not-stated | 3.733 | `doc_id: 02-fap-and-academic-procedures`, `audience: student`, `campus: all`, `category: academic_services` |
-| 3 | `03-tuition-hcm.md` | https://daihoc.fpt.edu.vn/hoc-phi-tai-campus-tp-ho-chi-minh/ | 2026-09-19 / not-stated | 2.449 | `doc_id: 03-tuition-hcm`, `audience: student`, `campus: hcm`, `category: tuition` |
-| 4 | `04-scholarship-faq.md` | https://daihoc.fpt.edu.vn/hoc-bong/faq-hoc-bong/ | 2026-09-19 / not-stated | 2.745 | `doc_id: 04-scholarship-faq`, `audience: student`, `campus: all`, `category: scholarship` |
-| 5 | `05-student-services-hcm.md` | https://daihoc.fpt.edu.vn/hcm/lien-he/ | 2026-09-19 / not-stated | 995 | `doc_id: 05-student-services-hcm`, `audience: student`, `campus: hcm`, `category: student_services` |
-| 6 | `06-campus-facilities-hcm.md` | https://daihoc.fpt.edu.vn/hcm/ | 2026-09-19 / not-stated | 9.327 | `doc_id: 06-campus-facilities-hcm`, `audience: all`, `campus: hcm`, `category: campus_services` |
-| 7 | `07-ojt-regulations.md` | https://daihoc.fpt.edu.vn/thong-bao-huong-dan/ojt-spring-2026-thong-bao-tham-du-orientation-ojt/ | 2026-09-19 / not-stated | 2.535 | `doc_id: 07-ojt-regulations`, `audience: student`, `campus: hcm`, `category: ojt` |
-| 8 | `08-ojt-registration.md` | https://daihoc.fpt.edu.vn/thong-bao-huong-dan/ojt-spring-2026-thong-bao-ve-viec-huong-dan-sinh-vien-dang-ky-doanh-nghiep-ojt/ | 2026-09-19 / not-stated | 3.498 | `doc_id: 08-ojt-registration`, `audience: student`, `campus: hcm`, `category: ojt_registration` |
-| 9 | `09-international-exchange-hcm.md` | https://daihoc.fpt.edu.vn/hcm/chuong-trinh-trao-doi-exchange/ | 2026-09-19 / not-stated | 4.197 | `doc_id: 09-international-exchange-hcm`, `audience: student`, `campus: hcm`, `category: international_exchange` |
-| 10 | `10-departments-and-leadership-hcm.md` | https://daihoc.fpt.edu.vn/hcm/ban-lanh-dao-campus-hcm/ | 2026-09-19 / not-stated | 4.637 | `doc_id: 10-departments-and-leadership-hcm`, `audience: staff`, `campus: hcm`, `category: support_routing` |
-
-**Danh sách kiểm tra quản trị dữ liệu (Data governance checklist):**
-- [x] Tập tài liệu (Corpus) chỉ chứa nguồn công khai/được phép dùng theo `robots.txt` và không chứa dữ liệu cá nhân, thông tin đăng nhập hoặc tài liệu nội bộ.
-- [x] Mỗi tài liệu có `doc_id`, `source_url`, `retrieved_at`, `document_version` (`not-stated`) trong YAML front matter và đồng bộ 1-1 với `sources.csv`.
-
-### Cấu trúc Metadata (Metadata Schema)
-
-| Trường metadata | Kiểu | Ví dụ giá trị | Tại sao hữu ích cho truy xuất (retrieval)? |
-|---|---|---|---|
-| `doc_id` | string | `01-academic-regulations` | Định danh tài liệu gốc duy nhất, hỗ trợ truy vết nguồn và hàm `delete_document()`. |
-| `audience` | string | `student` / `staff` / `all` | **Cực kỳ quan trọng**: Phân tách luồng thông tin cho sinh viên vs. cán bộ, cho phép kiểm chứng hiệu quả A/B của `search_with_filter()`. |
-| `campus` | string | `hcm` / `all` | Lọc thông tin học phí, địa điểm văn phòng áp dụng riêng cho campus TP.HCM. |
-| `category` | string | `tuition`, `scholarship`, `ojt` | Hỗ trợ tiền lọc theo nghiệp vụ học vụ cụ thể để thu hẹp không gian tìm kiếm. |
+Mỗi thành viên hoàn thiện riêng phần code cốt lõi và `REPORT_CANHAN.md`. Báo cáo
+này tổng hợp phần nhóm theo rubric trong `docs/SCORING.md`.
 
 ---
 
-## 2. Thiết kế chiến lược (Strategy Design) — Nhóm (15 điểm)
+## 1. Lựa chọn tài liệu — Document Set Quality (10 điểm)
 
-### Phân tích đường cơ sở (Baseline Analysis)
+### 1.1. Chủ đề và lý do lựa chọn
 
-Chạy `ChunkingStrategyComparator().compare()` trên 3 tài liệu đại diện (bỏ qua khối YAML front matter):
+Nhóm xây dựng trợ lý tra cứu quy chế và dịch vụ sinh viên Trường Đại học FPT
+TP.HCM. Thông tin sinh viên cần thường nằm rải rác trong quy chế đào tạo, FAP,
+thông báo học phí, học bổng, OJT và trang liên hệ. Một hệ thống RAG có trích dẫn
+giúp gom thông tin, tìm đúng đối tượng và hạn chế trả lời không có căn cứ.
 
-| Tài liệu | Chiến lược (Strategy) | Số lượng Chunk | Độ dài trung bình | Giữ được ngữ cảnh không? |
-|-----------|------------------------|:--------------:|:-----------------:|--------------------------|
-| **`01-academic-regulations.md`** (20.531 chars) | FixedSizeChunker (`fixed_size`) | 46 | 495.2 | Trung bình — bị cắt ngang các Điều/Khoản |
-| | SentenceChunker (`by_sentences`) | 72 | 283.8 | Tốt ở cấp câu, nhưng mất liên kết tiêu đề Chương/Điều |
-| | RecursiveChunker (`recursive`) | 55 | 371.8 | Rất tốt — ưu tiên giữ đoạn văn và ngắt mục logic |
-| **`03-tuition-hcm.md`** (2.508 chars) | FixedSizeChunker (`fixed_size`) | 6 | 459.7 | Kém — chém ngang các dòng bảng học phí |
-| | SentenceChunker (`by_sentences`) | 1 | 2508.0 | Thất bại — bảng markdown không có dấu câu nên bị gom thành 1 chunk khổng lồ |
-| | RecursiveChunker (`recursive`) | 6 | 417.0 | Tốt — chia nhỏ bảng theo ranh giới dòng xuống dòng `\n` |
-| **`04-scholarship-faq.md`** (2.782 chars) | FixedSizeChunker (`fixed_size`) | 7 | 440.3 | Trung bình — cắt đôi giữa câu hỏi và câu trả lời FAQ |
-| | SentenceChunker (`by_sentences`) | 14 | 196.4 | Khá tốt với các đoạn văn ngắn |
-| | RecursiveChunker (`recursive`) | 8 | 346.0 | Rất tốt — giữ trọn vẹn từng cặp câu hỏi - đáp theo `\n\n` |
+### 1.2. Danh mục dữ liệu
 
-### Chiến lược của từng thành viên
+Corpus gồm 10 tài liệu Markdown trong `data/university/`:
 
-**Thành viên 1 — R1 (Data Lead): FixedSizeChunker with Overlap**
-- **Loại chiến lược:** FixedSize (`chunk_size=500, overlap=50`)
-- **Mô tả & lý do chọn:** Đóng vai trò làm đường cơ sở (baseline) kiểm chuẩn cho cả nhóm. Ưu điểm là phân bố độ dài đồng đều, overlap 50 ký tự giúp giảm bớt nguy cơ mất thông tin tại biên cắt. Nhược điểm lớn nhất là mù cấu trúc, cắt ngang các bảng biểu biểu phí và các điều khoản pháp quy.
+| # | Tài liệu | Nội dung chính | Ký tự phần nội dung | Metadata nổi bật |
+|---:|---|---|---:|---|
+| 1 | `01-academic-regulations.md` | Quy chế đào tạo chính quy | 20.795 | `student`, `all`, `academic_regulation` |
+| 2 | `02-fap-and-academic-procedures.md` | FAP và thủ tục học vụ | 3.929 | `student`, `all`, `academic_services` |
+| 3 | `03-tuition-hcm.md` | Học phí K22 năm 2026 | 2.563 | `student`, `hcm`, `tuition` |
+| 4 | `04-scholarship-faq.md` | Học bổng, thời hạn, GPA | 2.836 | `student`, `all`, `scholarship` |
+| 5 | `05-student-services-hcm.md` | Phòng Dịch vụ Sinh viên | 1.034 | `student`, `hcm`, `student_services` |
+| 6 | `06-campus-facilities-hcm.md` | Cơ sở vật chất campus | 9.597 | `student`, `hcm`, `campus_services` |
+| 7 | `07-ojt-regulations.md` | Điều kiện và Orientation OJT | 2.658 | `student`, `hcm`, `ojt` |
+| 8 | `08-ojt-registration.md` | Đăng ký doanh nghiệp OJT | 3.685 | `student`, `hcm`, `ojt_registration` |
+| 9 | `09-international-exchange-hcm.md` | Trao đổi quốc tế | 4.276 | `student`, `hcm`, `international_exchange` |
+| 10 | `10-departments-and-support-routing-hcm.md` | Điều hướng phòng ban hỗ trợ | 4.873 | `student`, `hcm`, `support_routing` |
 
-**Thành viên 2 — R2 (Benchmark Lead): SentenceChunker**
-- **Loại chiến lược:** SentenceChunker (`max_sentences_per_chunk=3`)
-- **Mô tả & lý do chọn:** Tập trung bảo toàn tính hoàn chỉnh ngữ nghĩa của từng câu văn. Phù hợp với các đoạn văn xuôi và quy chế dạng điều kiện. Nhược điểm: hoàn toàn bất lực trước dữ liệu bảng biểu markdown (như bảng học phí) do không phát hiện được dấu chấm câu.
+Nguồn và metadata đầy đủ được quản lý trong `data/university/sources.csv`. Mỗi
+tài liệu có `doc_id`, `title`, `source_url`, `retrieved_at`, `document_version`,
+`audience`, `campus`, `department`, `category`, `language` và thông tin truy vết.
 
-**Thành viên 3 — R3 (Strategy Lead): HeadingAware + Recursive Chunking (Bắt buộc K4-L3A)**
-- **Loại chiến lược:** Custom Heading-Aware Recursive Chunker
-- **Mô tả & lý do chọn:** Bóc tách tài liệu dựa trên ranh giới tiêu đề Heading Markdown (`#`, `##`, `###`), biến mỗi Điều hoặc Mục thành một đơn vị ngữ nghĩa độc lập. Nếu mục quá dài (> 500 ký tự), gọi đệ quy `RecursiveChunker` để chia nhỏ tiếp. Đây là chiến lược tự nhiên và tối ưu nhất cho văn bản quy định đại học.
-- **Code snippet:**
-```python
-class HeadingAwareChunker:
-    def __init__(self, chunk_size: int = 500) -> None:
-        self.chunk_size = chunk_size
-        self.recursive = RecursiveChunker(chunk_size=chunk_size)
+### 1.3. Quản trị và kiểm định dữ liệu
 
-    def chunk(self, text: str) -> list[str]:
-        if not text:
-            return []
-        sections = re.split(r"(?m)^(?=#{1,4}\s+)", text)
-        chunks = []
-        for sec in sections:
-            sec = sec.strip()
-            if not sec:
-                continue
-            if len(sec) <= self.chunk_size:
-                chunks.append(sec)
-            else:
-                chunks.extend(self.recursive.chunk(sec))
-        return chunks
+- Chỉ dùng nội dung công khai; không lưu tài khoản hoặc dữ liệu cá nhân.
+- `doc_id` khớp 1-1 giữa 10 file Markdown và 10 dòng trong `sources.csv`.
+- Tất cả tài liệu dùng UTF-8 và có frontmatter hợp lệ.
+- Corpus được kiểm tra bằng `python scripts/validate_corpus.py`.
+
+```text
+Total checks performed : 68
+Passed checks          : 68
+Failed checks          : 0
+RESULT: ALL CHECKS PASSED
 ```
 
-### So Sánh Giữa Các Thành Viên
+---
 
-| Thành viên | Chiến lược (Strategy) | Số Chunks | Điểm mạnh | Điểm yếu |
-|---|---|:---:|---|---|
-| Thành viên 1 | `fixed_size` (500, 50) | 127 | Ổn định, kích thước dự đoán được | Cắt ngang bảng biểu, mất ngữ cảnh tiêu đề cha |
-| Thành viên 2 | `by_sentences` (3) | 126 | Giữ trọn vẹn ngữ nghĩa từng câu | Thất bại với bảng markdown (gom thành 1 chunk 2.5KB) |
-| Thành viên 3 | `heading_recursive` (500) | 178 | Bảo toàn trọn vẹn cấu trúc Điều/Khoản và bảng biểu | Tạo ra nhiều chunk hơn (178 chunks) |
+## 2. Thiết kế chiến lược — Strategy Design (15 điểm)
 
-**Chiến lược nào tốt nhất cho chủ đề này? Tại sao?**
-> Chiến lược **Heading-Aware Recursive Chunker** là lựa chọn vượt trội nhất cho dữ liệu quy định đại học. Vì văn bản quy chế vốn đã được nhà trường cấu trúc hóa theo Chương - Điều - Khoản, việc cắt theo heading giúp mỗi chunk là một điều khoản hoàn chỉnh. Khi truy xuất, người dùng nhận được trọn vẹn cả tiêu đề lẫn nội dung của điều khoản mà không bị đứt đoạn.
+### 2.1. Baseline
+
+Nhóm khảo sát ba chiến lược có sẵn:
+
+| Chiến lược | Điểm mạnh | Hạn chế trên corpus FPTU |
+|---|---|---|
+| Fixed-size | Đơn giản, kích thước đều | Có thể cắt giữa Điều/Khoản, bảng hoặc câu |
+| Sentence | Giữ câu văn hoàn chỉnh | Bảng Markdown ít dấu câu có thể thành chunk rất lớn |
+| Recursive | Tôn trọng đoạn/dòng tốt hơn | Chunk con có thể mất tiêu đề và chủ đề cha |
+
+Ví dụ quan trọng là bảng học phí trong tài liệu 03: SentenceChunker có thể xem
+nhiều dòng bảng là một câu, trong khi Fixed-size có thể tách dòng tên ngành khỏi
+hai mức học phí. Quy chế dài trong tài liệu 01 lại cần giữ liên kết Chương → Điều
+→ Khoản.
+
+### 2.2. Chiến lược của từng thành viên
+
+| Thành viên | Chiến lược | Mục tiêu kỹ thuật |
+|---|---|---|
+| Hà Mạnh Tuân | Heading-aware parent-child + BM25/Dense/RRF | Tìm chính xác trên child nhưng trả parent đầy đủ cho Agent |
+| Lương Quang Huy | HeadingAwareContextChunker + pre-filter | Gắn đường dẫn heading vào chunk và loại nhiễu bằng metadata |
+| Đặng Quốc Cường | Embedding retrieval + metadata filter | Giữ pipeline gọn, ưu tiên semantic similarity và đúng audience |
+| Lương Khánh Toàn | Heading Recursive, so sánh filtered/unfiltered | Kiểm tra ảnh hưởng của heading, recursive split và pre-filter |
+
+### 2.3. Chiến lược nhóm được lựa chọn
+
+Nhóm chọn **heading-aware hierarchical chunking + parent-child retrieval kết hợp
+Hybrid Search** làm chiến lược cuối vì đây là phần đã được tích hợp end-to-end,
+có kiểm thử tự động và có benchmark tái lập.
+
+Quy trình:
+
+```text
+Tài liệu Markdown + metadata
+             ↓
+Nhận diện Title → Chương → Điều → Khoản
+             ↓
+Parent section (mục tiêu ≤ 1.800 ký tự)
+             ↓
+Child chunk (mục tiêu 450, overlap 60)
+             ↓
+BM25 sparse + Dense embedding
+             ↓
+Reciprocal Rank Fusion (RRF)
+             ↓
+Gom trùng parent_id, lấy parent Top-k
+             ↓
+Grounded answer + citations
+```
+
+Lý do lựa chọn:
+
+- Child ngắn tập trung tín hiệu truy vấn tốt hơn.
+- Parent giữ đủ bảng, điều kiện và ngữ cảnh xung quanh.
+- Prefix heading giúp một khoản ngắn vẫn mang chủ đề của Điều/Chương.
+- BM25 bắt chính xác `90%`, `K22`, hotline và số tiền.
+- Dense retrieval bắt các cách diễn đạt đồng nghĩa.
+- RRF hợp nhất thứ hạng mà không cần chuẩn hóa thang điểm BM25 và cosine.
+- Metadata pre-filter bảo đảm đúng `audience` và `campus`.
+
+### 2.4. Kiểm thử chiến lược
+
+Toàn bộ repository hiện có 80 bài kiểm thử đạt, bao gồm test bắt buộc và test
+mở rộng cho heading parsing, parent-child chunking, parent expansion, deduplicate,
+multi-source evaluation và evidence criteria.
+
+```text
+Ran 80 tests
+OK
+```
 
 ---
 
-## 3. Câu hỏi đánh giá & Chất lượng truy xuất (Retrieval Quality) — Nhóm (10 điểm)
+## 3. Benchmark chung và Gold Answers
 
-### Câu hỏi đánh giá & Câu trả lời chuẩn (nhóm thống nhất)
+Nhóm thống nhất dùng đúng 5 câu trong `gold_queries.json`:
 
-| # | Câu hỏi (Query) | Câu trả lời chuẩn (Gold Answer) | Chuỗi đặc trưng (`must_contain`) | Chunk chứa thông tin |
-|---|---|---|---|---|
-| 1 | Điều kiện để sinh viên được công nhận tốt nghiệp đại học chính quy là gì? | Tích lũy đủ số tín chỉ, GPA toàn khóa $\ge 2.0$, hoàn thành các học phần điều kiện (GDQP, GDTC, OJT) và không bị kỷ luật đình chỉ. | `2.0` | `01-academic-regulations#38` |
-| 2 | Mức học phí chuyên ngành một học kỳ tại Campus TP. Hồ Chí Minh áp dụng cho khóa K22 ngành Công nghệ thông tin là bao nhiêu? | KV1 là 22.120.000 VNĐ; Các khu vực khác là 31.600.000 VNĐ/học kỳ. | `31.600.000` | `03-tuition-hcm#1` |
-| 3 | Thời hạn nộp hồ sơ chương trình học bổng Đại học FPT là ngày nào và có bắt buộc nộp video không? | Hạn nộp là 15/5/2026. Không bắt buộc nộp video, có thể chọn video không quá 2 phút hoặc bài viết 350-500 từ. | `15/5/2026` | `04-scholarship-faq#3` |
-| 4 | Sinh viên cần tích lũy bao nhiêu phần trăm tín chỉ để đủ điều kiện tham gia học kỳ thực tập doanh nghiệp OJT? | Sinh viên cần đạt ít nhất 90% tổng số tín chỉ tích lũy từ Học kỳ 1 – Học kỳ 5 (không gồm GDTC, GDQP). | `90%` | `07-ojt-regulations#1` |
-| 5 | Phòng Dịch vụ Sinh viên tại campus TP.HCM có số điện thoại hotline và phòng làm việc ở đâu? | Hotline: 028 7300 5585, đặt tại Phòng 202 - Campus TP.HCM. | `028 7300 5585` | `05-student-services-hcm#0` |
+| ID | Câu hỏi | Gold answer tóm tắt | Nguồn chuẩn |
+|---|---|---|---|
+| Q1 | Điều kiện đầy đủ để tham gia OJT? | Đủ 90% tín chỉ HK1–5, không tính GDTC/GDQP; đọc tài liệu và tham gia Orientation bắt buộc | `01-academic-regulations`, `07-ojt-regulations` |
+| Q2 | Học phí AI năm 2026 tại HCM cho KV1 và khu vực khác? | K22: 22.120.000 đồng/kỳ ở KV1 và 31.600.000 đồng/kỳ ở khu vực khác | `03-tuition-hcm` |
+| Q3 | Hạn học bổng 2026 và GPA duy trì? | 15/5/2026; GPA tối thiểu 7.0/10 | `04-scholarship-faq` |
+| Q4 | Gửi/Xem đơn online và xem điểm danh trên FAP? | Gửi Đơn, theo dõi Xem Đơn; Báo cáo → Báo cáo điểm danh | `02-fap-and-academic-procedures` |
+| Q5 | Liên hệ ở đâu khi gặp vấn đề hành chính/đời sống? | Phòng Dịch vụ Sinh viên, 028 7300 5585, phòng 202 | `05-student-services-hcm` |
 
-### Tổng hợp chất lượng truy xuất của nhóm
-
-| # | Câu hỏi | Chiến lược tốt nhất | Có chunk trong top-3? | Ghi chú đánh giá hai mức |
-|---|---|---|:---:|---|
-| 1 | Điều kiện tốt nghiệp | `fixed_size` / `heading_recursive` | Có (Rank 3) | Đạt kiểm tra cấp `doc_id` nhưng trượt kiểm tra cấp nội dung do `MockEmbedder` băm MD5 |
-| 2 | Mức học phí K22 CNTT | `heading_recursive` | Không | MockEmbedder đưa tài liệu ban lãnh đạo (`10-departments`) lên top-1 |
-| 3 | Hạn nộp học bổng | `heading_recursive` | Không | Chunk quy chế thi lọt vào top-3 thay vì FAQ học bổng |
-| 4 | Tỷ lệ tín chỉ đi OJT | `fixed_size` | Không | Cần semantic embedding thực tế để bắt từ khóa "90%" |
-| 5 | Hotline Dịch vụ Sinh viên | `heading_recursive` | Có (khi có filter) | **Pre-filter loại bỏ 100% tài liệu cán bộ/lãnh đạo khỏi top-3** |
-
-**Lọc bằng metadata có giúp ích không? Ở câu hỏi nào?**
-> **Rất hữu ích, thể hiện rõ nhất ở Câu hỏi 5.**
-> - **Khi không lọc (`search`):** Top-2 trả về tài liệu `10-departments-and-leadership-hcm` (`audience: staff`) do trùng từ khóa chung "phòng ban", "lãnh đạo", "liên hệ".
-> - **Khi có lọc (`search_with_filter` với `audience: student`):** Hệ thống loại bỏ hoàn toàn tài liệu của cán bộ/ban giám hiệu, chỉ giữ lại các tài liệu phục vụ sinh viên (`01-academic-regulations`, `09-international`, `07-ojt`), chứng minh cơ chế pre-filtering đã bảo vệ độ chính xác ngữ cảnh.
+Q1 là câu multi-source/multi-hop. Mỗi câu còn có `evidence.phrases`,
+`answer_criteria.all_terms` và `expected_audience=student` để chấm bằng chứng,
+câu trả lời và đúng đối tượng.
 
 ---
 
-## 4. Thuyết trình (Demo) & Bài học nhóm — Nhóm (5 điểm)
+## 4. Chuẩn hóa kết quả giữa các thành viên
 
-**Những phân tích (insights) hay nhất nhóm sẽ trình bày:**
-1. **Sự khác biệt giữa hai mức chấm (Doc ID vs Content Match):** Một chiến lược có thể dễ dàng đạt 100% tài liệu đúng (`doc_id`), nhưng nếu chunking không chuẩn xác thì câu trả lời thực tế vẫn hoàn toàn thất bại do chunk không chứa số liệu.
-2. **Hiện tượng thất bại của SentenceChunker trên Markdown Table:** Dữ liệu học phí trình bày dưới dạng bảng markdown không có dấu chấm kết thúc câu, dẫn đến việc `SentenceChunker` gom toàn bộ bảng thành một chunk đơn 2.500 ký tự.
-3. **Hiệu quả thực tế của Metadata Pre-filtering:** Minh chứng trực tiếp qua thử nghiệm A/B câu 5, loại bỏ triệt để nhiễu giữa dữ liệu sinh viên và dữ liệu điều hành của cán bộ.
+Ba báo cáo được cung cấp không dùng hoàn toàn cùng cấu hình. Báo cáo của Lương
+Quang Huy để trống bảng 5 câu; báo cáo của Lương Khánh Toàn có một giá trị
+`nDCG@5 = 1.665`, vượt miền hợp lệ [0,1]; báo cáo Đặng Quốc Cường nêu MRR 100%
+trong khi Recall@1 là 53,3%, cho thấy định nghĩa/tổng hợp metric khác evaluator
+chuẩn. Vì vậy nhóm không lấy trung bình trực tiếp các con số này.
 
-**Bài học rút ra khi so sánh trong nhóm:**
-> Cùng một tập dữ liệu nhưng chiến lược chia nhỏ quyết định tính sống còn của bước Retrieval. `FixedSizeChunker` dù đơn giản nhưng tạo ra ranh giới cắt ngẫu nhiên làm đứt gãy thông tin; trong khi `HeadingAwareChunker` khai thác tối đa cấu trúc ngữ nghĩa có sẵn của văn bản quy định đại học.
+| Thành viên | Kết quả có thể dùng | Giới hạn khi so sánh |
+|---|---|---|
+| Lương Quang Huy | Mô tả HeadingAwareContextChunker và metadata filter | Bảng benchmark chưa được điền nên không suy diễn điểm |
+| Đặng Quốc Cường | Báo cáo 5/5 có chunk liên quan Top-3; 4/5 đủ evidence | Metric macro dùng cách tổng hợp khác evaluator cuối |
+| Lương Khánh Toàn | So sánh mock unfiltered, filtered và Heading Recursive; Audience Match tăng 96% → 100% khi lọc | Một số metric không cùng chuẩn; nDCG > 1 bị loại khỏi báo cáo nhóm |
+| Hà Mạnh Tuân | Có script, output và unit test cho schema multi-source | Chạy offline bằng mock/no-LLM nên Faithfulness thấp hơn khi dùng LLM thật |
 
-**Nếu làm lại, nhóm sẽ thay đổi gì trong chiến lược dữ liệu (data strategy)?**
-> Nhóm sẽ triển khai Semantic Embedding thực tế (`sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2` hoặc Gemini API) thay vì dựa vào `MockEmbedder` để toàn bộ 5 câu hỏi đạt điểm tuyệt đối 10/10 trên thực tế. Đồng thời, nhóm sẽ bổ sung breadcrumb tiêu đề cha vào từng chunk con để hoàn thiện 100% tính truy vết nguồn.
+Kết quả chính thức của nhóm được chạy lại trên cùng corpus, cùng 5 câu, cùng
+evaluator trong `scripts/run_advanced_eval.py`, với cấu hình deterministic:
+
+```powershell
+python scripts/run_advanced_eval.py `
+  --benchmark-file "C:\Users\TUAN\Downloads\gold_queries.json" `
+  --embedding mock --no-llm `
+  --output ket_qua_gold_queries.txt
+```
 
 ---
 
-## Tự Đánh Giá (Phần Nhóm)
+## 5. Chất lượng truy xuất — Retrieval Quality (10 điểm)
 
-| Tiêu chí | Điểm tự đánh giá |
-|----------|:----------------:|
-| Lựa chọn tài liệu (Document Set Quality) | 10 / 10 |
-| Thiết kế chiến lược (Strategy Design) | 15 / 15 |
-| Chất lượng truy xuất (Retrieval Quality) | 10 / 10 |
-| Thuyết trình (Demo) | 5 / 5 |
-| **Tổng phần nhóm** | **40 / 40** |
+### 5.1. Bảy metric chính thức
+
+| Metric | Kết quả | Cách hiểu |
+|---|---:|---|
+| Recall@1 | 50,00% | Với Q1 có hai gold documents, Top-1 đóng góp 1/2 |
+| Recall@5 | **100,00%** | Mọi gold document đều xuất hiện trong Top-5 |
+| MRR | 0,7500 | Gold document đầu tiên thường ở vị trí cao |
+| nDCG@5 | 0,8123 | Xếp hạng nguồn liên quan tương đối tốt và luôn nằm trong [0,1] |
+| Full Evidence@5 | 60,00% | 3/5 câu có đủ tất cả nhóm evidence |
+| Faithfulness / Agent Accuracy | 63,33% | Tỷ lệ nhóm answer criteria đạt trong fallback offline |
+| Audience Match Rate | **100,00%** | Tất cả kết quả thuộc `student` hoặc `all` |
+
+Độ trễ trung bình là 2,1 ms khi dùng MockEmbedder trên corpus đã nạp. Số liệu này
+không đại diện cho độ trễ API Gemini.
+
+### 5.2. Phân tích từng truy vấn
+
+| ID | Top-1 | R@5 | MRR | Full answer criteria | Nhận xét |
+|---|---|---:|---:|---:|---|
+| Q1 | `07-ojt-regulations` | 1,00 | 1,00 | 1/3 | Hai gold docs có trong Top-5 nhưng fallback chưa tổng hợp đủ ba ý |
+| Q2 | `06-campus-facilities-hcm` | 1,00 | 0,50 | 3/3 | Nguồn học phí đứng thứ hai; câu trả lời vẫn đủ tiêu chí |
+| Q3 | `04-scholarship-faq` | 1,00 | 1,00 | 1/2 | Đúng nguồn Top-1 nhưng fallback bỏ sót một ý |
+| Q4 | `02-fap-and-academic-procedures` | 1,00 | 1,00 | 3/3 | Truy xuất và trả lời đầy đủ |
+| Q5 | `10-departments-and-support-routing-hcm` | 1,00 | 0,25 | 1/3 | Nguồn chuẩn đứng thứ tư; thiếu hotline/phòng trong fallback |
+
+### 5.3. Định nghĩa metric
+
+- **Recall@k:** tỷ lệ gold documents duy nhất xuất hiện trong Top-k. Cách tính
+  này xử lý đúng Q1 có hai nguồn.
+- **MRR:** nghịch đảo vị trí của gold document đầu tiên.
+- **nDCG@5:** mỗi gold document chỉ đóng góp relevance một lần; IDCG được tính
+  theo số gold documents, vì vậy kết quả luôn thuộc [0,1].
+- **Full Evidence@5:** bằng 1 chỉ khi Top-5 bao phủ mọi nhóm evidence; không cấp
+  0,5 điểm chỉ vì đúng doc_id.
+- **Faithfulness / Agent Accuracy:** số nhóm `answer_criteria` mà câu trả lời chứa
+  đủ `all_terms`, chia tổng số nhóm.
+- **Audience Match Rate:** tỷ lệ Top-5 có audience đúng hoặc `all`.
+
+### 5.4. Chấm theo rubric Top-3 + Agent Answer
+
+Áp dụng nghiêm tiêu chí 2/1/0 điểm mỗi câu:
+
+| ID | Đánh giá | Điểm |
+|---|---|---:|
+| Q1 | Có nguồn liên quan Top-1 nhưng câu trả lời thiếu chi tiết | 1/2 |
+| Q2 | Nguồn liên quan ở Top-2, câu trả lời đủ | 1/2 |
+| Q3 | Nguồn Top-1 nhưng câu trả lời thiếu một tiêu chí | 1/2 |
+| Q4 | Nguồn Top-1 và câu trả lời đủ | 2/2 |
+| Q5 | Nguồn chuẩn ở Top-4, ngoài Top-3 | 0/2 |
+| **Tổng** |  | **5/10** |
+
+Điểm này được giữ nguyên theo bằng chứng thực nghiệm, không thay bằng Recall@5.
+Recall@5 cao cho biết nguồn đã được thu hồi, nhưng rubric Top-3 và độ đầy đủ câu
+trả lời là tiêu chuẩn nghiêm hơn.
+
+---
+
+## 6. Failure Analysis
+
+### 6.1. Q1 — bằng chứng phân tán giữa hai tài liệu
+
+Ngưỡng 90% tín chỉ và phần loại trừ GDTC/GDQP nằm trong quy chế đào tạo, còn yêu
+cầu Orientation nằm trong thông báo OJT. Một truy vấn duy nhất có thể ưu tiên
+nhiều parent thuộc thông báo OJT và làm giảm không gian cho parent từ quy chế.
+
+**Cải thiện:** tách câu hỏi thành các sub-query “điều kiện tín chỉ OJT” và “yêu
+cầu Orientation OJT”, truy xuất riêng rồi hợp nhất bằng RRF; giới hạn số parent
+trên mỗi tài liệu để tăng diversity.
+
+### 6.2. Q5 — tài liệu điều hướng cạnh tranh với tài liệu dịch vụ
+
+`10-departments-and-support-routing-hcm` chứa nhiều từ “liên hệ”, “đơn vị” và
+“campus”, nên được xếp trên `05-student-services-hcm`, dù tài liệu 05 chứa hotline
+và phòng chính xác.
+
+**Cải thiện:** tăng trọng số exact entity (hotline, phòng, email), route truy vấn
+theo `category=student_services`, hoặc dùng reranker chấm độ bao phủ các trường
+“đơn vị + hotline + số phòng”.
+
+### 6.3. Sentence fallback
+
+Fallback offline chọn các câu có overlap từ vựng cao. Nó có thể chọn nhiều câu
+cùng chủ đề nhưng bỏ qua một con số hoặc mệnh đề cần thiết ở parent khác.
+
+**Cải thiện:** generation theo từng answer criterion, sau đó kiểm tra evidence
+coverage trước khi xuất câu trả lời; nếu thiếu thì corrective retrieval.
+
+---
+
+## 7. Demo và bài học nhóm (5 điểm)
+
+### Kịch bản demo
+
+1. Chạy toàn bộ 80 tests.
+2. Chạy `scripts/validate_corpus.py` và trình bày kết quả 68/68.
+3. Minh họa một tài liệu được tách thành parent/child và hiển thị heading path.
+4. Hỏi Q1 để thấy truy vấn multi-source và parent expansion.
+5. Hỏi Q5 để minh họa failure case và tác dụng của metadata/reranking.
+6. Chạy benchmark 7 metric và mở `ket_qua_gold_queries.txt`.
+
+### Bài học chính
+
+- Chunking quyết định trần chất lượng retrieval; LLM không thể phục hồi bằng
+  chứng đã bị cắt hoặc không được truy xuất.
+- Sentence chunking không phù hợp cho mọi bảng Markdown.
+- Dense embedding xử lý đồng nghĩa tốt; BM25 xử lý tên riêng và số liệu tốt.
+- Đúng tài liệu chưa đồng nghĩa với đủ bằng chứng.
+- Audience pre-filter là lớp bảo vệ quan trọng cho trợ lý sinh viên.
+- Metric phải có định nghĩa thống nhất; không thể lấy trung bình các lần chạy có
+  schema hoặc công thức khác nhau.
+
+---
+
+## 8. Tự đánh giá phần nhóm
+
+| Tiêu chí | Điểm tối đa | Điểm tự đánh giá | Minh chứng |
+|---|---:|---:|---|
+| Strategy Design | 15 | 15 | Bốn hướng tiếp cận, baseline, so sánh và chiến lược cuối |
+| Document Set Quality | 10 | 10 | 10 nguồn công khai, metadata đầy đủ, 68/68 checks |
+| Retrieval Quality | 10 | 5 | Chấm nghiêm 5 câu theo Top-3 + answer accuracy |
+| Demo | 5 | 5 | Kịch bản có test, corpus, chunking, retrieval và failure case |
+| **Tổng** | **40** | **35/40** | Không thổi phồng điểm khi Full Evidence/Faithfulness chưa hoàn hảo |
+
+---
+
+## 9. Tệp minh chứng
+
+- Corpus: `data/university/` và `data/university/sources.csv`.
+- Gold benchmark: `C:\Users\TUAN\Downloads\gold_queries.json`.
+- Kết quả chính thức: `ket_qua_gold_queries.txt`.
+- Chunking: `src/advanced_rag/chunking/heading_chunker.py` và
+  `src/advanced_rag/chunking/parent_child_chunker.py`.
+- Retrieval: `src/advanced_rag/retrieval/parent_child_retriever.py`,
+  `hybrid_retriever.py`, `bm25_retriever.py`, `dense_retriever.py`.
+- Evaluation: `scripts/run_advanced_eval.py`.
+- Tests: `tests/test_solution.py`, `tests/test_advanced_chunking.py`,
+  `tests/test_retrieval.py`, `tests/test_gold_evaluation.py`.

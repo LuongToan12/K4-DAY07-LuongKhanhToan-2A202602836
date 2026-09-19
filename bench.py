@@ -20,45 +20,45 @@ from src.store import EmbeddingStore
 
 CORPUS_DIR = Path("data/university")
 
-# 5 Benchmark queries designed for FPTU HCM Student Knowledge Base
+# 5 Benchmark queries from gold_queries.json designed for FPTU HCM Student Knowledge Base
 BENCHMARK_QUERIES = [
     {
         "id": 1,
-        "query": "Điều kiện để sinh viên được công nhận tốt nghiệp đại học chính quy là gì?",
-        "gold_doc_id": "01-academic-regulations",
-        "gold_answer": "Sinh viên tích lũy đủ số tín chỉ, điểm GPA toàn khóa đạt từ 2.0 trở lên, hoàn thành các học phần điều kiện (GDTC, GDQP, OJT) và không bị kỷ luật đình chỉ học tập.",
-        "must_contain": "2.0",
+        "query": "Sinh viên cần đáp ứng đầy đủ những điều kiện nào để tham gia OJT?",
+        "gold_doc_id": "07-ojt-regulations",
+        "gold_answer": "Sinh viên phải hoàn thành ít nhất 90% tổng số tín chỉ từ học kỳ 1 đến học kỳ 5, không tính Giáo dục thể chất và Giáo dục quốc phòng; đồng thời phải đọc tài liệu OJT và tham gia đầy đủ Orientation bắt buộc.",
+        "must_contain": "90%",
         "filter": None,
     },
     {
         "id": 2,
-        "query": "Mức học phí chuyên ngành một học kỳ tại Campus TP. Hồ Chí Minh áp dụng cho khóa K22 ngành Công nghệ thông tin là bao nhiêu?",
+        "query": "Học phí mỗi học kỳ năm 2026 của ngành Trí tuệ nhân tạo tại TP.HCM là bao nhiêu cho KV1 và các khu vực khác?",
         "gold_doc_id": "03-tuition-hcm",
-        "gold_answer": "Mức học phí mỗi học kỳ ngành Công nghệ thông tin khóa K22 tại campus TP.HCM là 22.120.000 VNĐ đối với KV1 và 31.600.000 VNĐ đối với các khu vực khác.",
-        "must_contain": "31.600.000",
+        "gold_answer": "Với tân sinh viên K22 nhập học năm 2026, ngành Trí tuệ nhân tạo có học phí mỗi học kỳ là 22.120.000 đồng ở KV1 và 31.600.000 đồng ở các khu vực khác.",
+        "must_contain": "22.120.000",
         "filter": None,
     },
     {
         "id": 3,
-        "query": "Thời hạn nộp hồ sơ chương trình học bổng Đại học FPT là ngày nào và có bắt buộc nộp video không?",
+        "query": "Hạn nộp hồ sơ học bổng năm 2026 là khi nào và GPA tối thiểu để duy trì học bổng là bao nhiêu?",
         "gold_doc_id": "04-scholarship-faq",
-        "gold_answer": "Hạn nộp hồ sơ học bổng là 15/5/2026. Không bắt buộc nộp video, thí sinh có thể chọn nộp video không quá 2 phút hoặc bài viết 350-500 từ.",
+        "gold_answer": "Hạn nộp hồ sơ học bổng là ngày 15/5/2026. Điều kiện duy trì học bổng khi theo học tại FPTU là GPA từ 7.0/10 trở lên.",
         "must_contain": "15/5/2026",
         "filter": None,
     },
     {
         "id": 4,
-        "query": "Sinh viên cần tích lũy bao nhiêu phần trăm tín chỉ để đủ điều kiện tham gia học kỳ thực tập doanh nghiệp OJT?",
-        "gold_doc_id": "07-ojt-regulations",
-        "gold_answer": "Sinh viên cần đạt ít nhất 90% tổng số tín chỉ tích lũy từ Học kỳ 1 đến Học kỳ 5 (không gồm GDTC và GDQP) để đủ điều kiện tham gia OJT.",
-        "must_contain": "90%",
+        "query": "Trên FAP, sinh viên gửi và theo dõi đơn online như thế nào, đồng thời xem báo cáo điểm danh ở đâu?",
+        "gold_doc_id": "02-fap-and-academic-procedures",
+        "gold_answer": "Trong Academic Information, sinh viên chọn loại đơn hoặc mục Gửi Đơn, sau đó theo dõi kết quả tại mục Xem Đơn. Muốn xem điểm danh, vào mục Báo cáo rồi chọn Báo cáo điểm danh.",
+        "must_contain": "Gửi Đơn",
         "filter": None,
     },
     {
         "id": 5,
-        "query": "Phòng Dịch vụ Sinh viên tại campus TP.HCM có số điện thoại hotline và phòng làm việc ở đâu?",
+        "query": "Sinh viên gặp vấn đề về thủ tục hành chính hoặc đời sống trong quá trình học tại campus TP.HCM thì liên hệ đơn vị nào, hotline và phòng bao nhiêu?",
         "gold_doc_id": "05-student-services-hcm",
-        "gold_answer": "Phòng Dịch vụ Sinh viên tại Campus TP.HCM có Hotline: 028 7300 5585, đặt tại Phòng 202.",
+        "gold_answer": "Sinh viên liên hệ Phòng Dịch vụ Sinh viên, hotline 028 7300 5585, tại phòng 202 campus FPTU TP.HCM.",
         "must_contain": "028 7300 5585",
         "filter": {"audience": "student"},
     },

@@ -1,0 +1,194 @@
+[
+  {
+    "id": "Q1",
+    "query": "Sinh viên cần đáp ứng đầy đủ những điều kiện nào để tham gia OJT?",
+    "expected_audience": "student",
+    "source_doc_ids": ["01-academic-regulations", "07-ojt-regulations"],
+    "gold_answer": "Sinh viên phải hoàn thành ít nhất 90% tổng số tín chỉ từ học kỳ 1 đến học kỳ 5, không tính Giáo dục thể chất và Giáo dục quốc phòng; đồng thời phải đọc tài liệu OJT và tham gia đầy đủ Orientation bắt buộc.",
+    "evidence": [
+      {
+        "id": "ojt-credit-threshold",
+        "phrases": [
+          "ít nhất 90% tổng số tín chỉ tích lũy từ Học kỳ 1 – Học kỳ 5",
+          "hoàn thành tối thiểu 90% tổng số tín chỉ của các học phần chuyên môn"
+        ]
+      },
+      {
+        "id": "ojt-credit-exclusions",
+        "phrases": [
+          "không bao gồm các môn Giáo dục thể chất và Giáo dục quốc phòng",
+          "không bao gồm Giáo giục quốc phòng, Giáo dục thể chất"
+        ]
+      },
+      {
+        "id": "ojt-orientation",
+        "phrases": [
+          "tham gia đầy đủ Orientation",
+          "ORIENTATION OJT LÀ NỘI DUNG BẮT BUỘC"
+        ]
+      }
+    ],
+    "answer_criteria": [
+      {
+        "id": "mentions-90-percent",
+        "all_terms": ["90%", "tín chỉ"]
+      },
+      {
+        "id": "mentions-exclusions",
+        "all_terms": ["Giáo dục thể chất", "Giáo dục quốc phòng"]
+      },
+      {
+        "id": "mentions-orientation",
+        "all_terms": ["Orientation", "bắt buộc"]
+      }
+    ]
+  },
+  {
+    "id": "Q2",
+    "query": "Học phí mỗi học kỳ năm 2026 của ngành Trí tuệ nhân tạo tại TP.HCM là bao nhiêu cho KV1 và các khu vực khác?",
+    "expected_audience": "student",
+    "source_doc_ids": ["03-tuition-hcm"],
+    "gold_answer": "Với tân sinh viên K22 nhập học năm 2026, ngành Trí tuệ nhân tạo có học phí mỗi học kỳ là 22.120.000 đồng ở KV1 và 31.600.000 đồng ở các khu vực khác.",
+    "evidence": [
+      {
+        "id": "tuition-cohort",
+        "phrases": [
+          "Học phí áp dụng cho tân sinh viên khóa K22 (nhập học năm 2026)"
+        ]
+      },
+      {
+        "id": "tuition-ai-row",
+        "phrases": [
+          "Trí tuệ nhân tạo | 22.120.000 | 31.600.000"
+        ]
+      }
+    ],
+    "answer_criteria": [
+      {
+        "id": "mentions-cohort",
+        "all_terms": ["K22", "2026"]
+      },
+      {
+        "id": "mentions-kv1-price",
+        "all_terms": ["KV1", "22.120.000"]
+      },
+      {
+        "id": "mentions-other-price",
+        "all_terms": ["khu vực khác", "31.600.000"]
+      }
+    ]
+  },
+  {
+    "id": "Q3",
+    "query": "Hạn nộp hồ sơ học bổng năm 2026 là khi nào và GPA tối thiểu để duy trì học bổng là bao nhiêu?",
+    "expected_audience": "student",
+    "source_doc_ids": ["04-scholarship-faq"],
+    "gold_answer": "Hạn nộp hồ sơ học bổng là ngày 15/5/2026. Điều kiện duy trì học bổng khi theo học tại FPTU là GPA từ 7.0/10 trở lên.",
+    "evidence": [
+      {
+        "id": "scholarship-deadline",
+        "phrases": [
+          "Hạn nộp hồ sơ học bổng là 15/5/2026"
+        ]
+      },
+      {
+        "id": "scholarship-maintenance-gpa",
+        "phrases": [
+          "Điều kiện duy trì học bổng (áp dụng khi thí sinh theo học tại FPTU): GPA ≥ 7.0/10"
+        ]
+      }
+    ],
+    "answer_criteria": [
+      {
+        "id": "mentions-deadline",
+        "all_terms": ["15/5/2026"]
+      },
+      {
+        "id": "mentions-gpa",
+        "all_terms": ["GPA", "7.0/10"]
+      }
+    ]
+  },
+  {
+    "id": "Q4",
+    "query": "Trên FAP, sinh viên gửi và theo dõi đơn online như thế nào, đồng thời xem báo cáo điểm danh ở đâu?",
+    "expected_audience": "student",
+    "source_doc_ids": ["02-fap-and-academic-procedures"],
+    "gold_answer": "Trong Academic Information, sinh viên chọn loại đơn hoặc mục Gửi Đơn, sau đó theo dõi kết quả tại mục Xem Đơn. Muốn xem điểm danh, vào mục Báo cáo rồi chọn Báo cáo điểm danh.",
+    "evidence": [
+      {
+        "id": "fap-submit-request",
+        "phrases": [
+          "lựa chọn các loại đơn từ theo nguyện vọng của mình, hoặc vào mục Gửi Đơn"
+        ]
+      },
+      {
+        "id": "fap-track-request",
+        "phrases": [
+          "theo dõi tại mục Xem Đơn để nhận kết quả"
+        ]
+      },
+      {
+        "id": "fap-attendance",
+        "phrases": [
+          "vào mục Báo cáo, và nhấn vào báo cáo điểm danh"
+        ]
+      }
+    ],
+    "answer_criteria": [
+      {
+        "id": "mentions-submit",
+        "all_terms": ["Gửi Đơn"]
+      },
+      {
+        "id": "mentions-track",
+        "all_terms": ["Xem Đơn", "kết quả"]
+      },
+      {
+        "id": "mentions-attendance",
+        "all_terms": ["Báo cáo", "điểm danh"]
+      }
+    ]
+  },
+  {
+    "id": "Q5",
+    "query": "Sinh viên gặp vấn đề về thủ tục hành chính hoặc đời sống trong quá trình học tại campus TP.HCM thì liên hệ đơn vị nào, hotline và phòng bao nhiêu?",
+    "expected_audience": "student",
+    "source_doc_ids": ["05-student-services-hcm"],
+    "gold_answer": "Sinh viên liên hệ Phòng Dịch vụ Sinh viên, hotline 028 7300 5585, tại phòng 202 campus FPTU TP.HCM.",
+    "evidence": [
+      {
+        "id": "student-services-scope",
+        "phrases": [
+          "thủ tục hành chính, hỗ trợ học tập, đời sống sinh viên"
+        ]
+      },
+      {
+        "id": "student-services-hotline",
+        "phrases": [
+          "Hotline: 028 7300 5585"
+        ]
+      },
+      {
+        "id": "student-services-room",
+        "phrases": [
+          "Phòng 202 – Campus Trường Đại học FPT TP.HCM"
+        ]
+      }
+    ],
+    "answer_criteria": [
+      {
+        "id": "mentions-office",
+        "all_terms": ["Phòng Dịch vụ Sinh viên"]
+      },
+      {
+        "id": "mentions-hotline",
+        "all_terms": ["028 7300 5585"]
+      },
+      {
+        "id": "mentions-room",
+        "all_terms": ["phòng 202"]
+      }
+    ]
+  }
+]
